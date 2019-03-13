@@ -1,6 +1,6 @@
 package com.alexjamesmalcolm.groupme.response;
 
-import com.alexjamesmalcolm.dishbot.groupme.attachment.Attachment;
+import com.alexjamesmalcolm.groupme.response.attachment.Attachment;
 
 import java.net.URI;
 import java.time.Instant;
