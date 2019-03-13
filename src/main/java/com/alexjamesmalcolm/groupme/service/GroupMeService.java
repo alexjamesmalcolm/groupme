@@ -1,7 +1,7 @@
 package com.alexjamesmalcolm.groupme.service;
 
-import com.alexjamesmalcolm.groupme.response.*;
 import com.alexjamesmalcolm.groupme.request.BotMessage;
+import com.alexjamesmalcolm.groupme.response.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
