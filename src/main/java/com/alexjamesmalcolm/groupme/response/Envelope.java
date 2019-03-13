@@ -30,4 +30,12 @@ public class Envelope {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.convertValue(response, typeToResolveTo);
     }
+
+    public HttpStatus getCode() {
+        return code;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
 }

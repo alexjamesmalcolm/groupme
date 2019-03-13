@@ -52,4 +52,20 @@ public class Bot {
     public URI getCallbackUrl() {
         return callbackUrl;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public URI getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public Boolean getDmNotification() {
+        return dmNotification;
+    }
 }

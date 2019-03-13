@@ -51,4 +51,28 @@ public class Member {
     public Long getUserId() {
         return userId;
     }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public URI getImageUrl() {
+        return imageUrl;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Boolean getMuted() {
+        return muted;
+    }
+
+    public Boolean getAutokicked() {
+        return autokicked;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
 }

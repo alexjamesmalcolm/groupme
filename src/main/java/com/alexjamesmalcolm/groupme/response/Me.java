@@ -76,4 +76,68 @@ public class Me {
     public Long getUserId() {
         return userId;
     }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Boolean getFacebookConnected() {
+        return facebookConnected;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public URI getImageUrl() {
+        return imageUrl;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Boolean getSms() {
+        return sms;
+    }
+
+    public Boolean getTwitterConnected() {
+        return twitterConnected;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public URI getShareUrl() {
+        return shareUrl;
+    }
+
+    public URI getShareQrCodeUrl() {
+        return shareQrCodeUrl;
+    }
+
+    public Map getMfa() {
+        return mfa;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
 }

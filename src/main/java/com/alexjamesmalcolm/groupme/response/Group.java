@@ -106,4 +106,76 @@ public class Group {
     public String getName() {
         return name;
     }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public URI getImageUrl() {
+        return imageUrl;
+    }
+
+    public Long getCreatorUserId() {
+        return creatorUserId;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Boolean getOfficeMode() {
+        return officeMode;
+    }
+
+    public URI getShareUrl() {
+        return shareUrl;
+    }
+
+    public URI getShareQrCodeUrl() {
+        return shareQrCodeUrl;
+    }
+
+    public Long getMaxMembers() {
+        return maxMembers;
+    }
+
+    public Integer getMessageCount() {
+        return messageCount;
+    }
+
+    public Long getLastMessageId() {
+        return lastMessageId;
+    }
+
+    public Instant getLastMessageCreatedAt() {
+        return lastMessageCreatedAt;
+    }
+
+    public String getLastMessageSenderNickname() {
+        return lastMessageSenderNickname;
+    }
+
+    public String getLastMessageText() {
+        return lastMessageText;
+    }
+
+    public URI getLastMessageSenderImageUrl() {
+        return lastMessageSenderImageUrl;
+    }
+
+    public List getLastMessageAttachments() {
+        return lastMessageAttachments;
+    }
 }
