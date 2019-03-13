@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven'
 
 group = 'com.github.alexjamesmalcolm'
 version = '0.0.1-SNAPSHOT'
