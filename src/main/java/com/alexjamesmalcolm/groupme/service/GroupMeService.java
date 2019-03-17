@@ -24,7 +24,7 @@ public class GroupMeService {
     private URI baseUrl;
 
     public GroupMeService() {
-        this.baseUrl = URI.create("https://api.response.com/v3");
+        this.baseUrl = URI.create("https://api.groupme.com/v3");
     }
 
     public Group getGroup(String accessToken, Long groupId) {
