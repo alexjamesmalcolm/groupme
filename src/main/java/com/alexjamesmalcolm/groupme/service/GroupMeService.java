@@ -4,8 +4,10 @@ import com.alexjamesmalcolm.groupme.request.BotMessage;
 import com.alexjamesmalcolm.groupme.response.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
 import java.net.URI;
@@ -106,5 +108,22 @@ public class GroupMeService {
     public Optional<Bot> getBot(String accessToken, Long groupId, URI callback) {
         List<Bot> bots = getBots(accessToken, groupId);
         return bots.stream().filter(bot -> bot.getCallbackUrl().equals(callback)).findFirst();
+    }
+
+    public Optional<Bot> getBot(String accessToken, Long groupId, String botId) {
+        return getBots(accessToken, groupId).stream().filter(bot -> bot.getBotId().equals(botId)).findFirst();
+    }
+
+    public void createBot(String token, String botName, Long groupId, URI avatarUrl, URI callbackUrl, boolean dmNotification) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(baseUrl);
+        builder.path("/bots");
+        builder.queryParam("name", botName);
+        builder.queryParam("group_id", groupId);
+        builder.queryParam("avatar_url", avatarUrl);
+        builder.queryParam("callback_url", callbackUrl);
+        builder.queryParam("dm_notification", dmNotification);
+        builder.queryParam("token", token);
+        String url = builder.toUriString();
+        restTemplate.execute(url, HttpMethod.POST, null, null);
     }
 }

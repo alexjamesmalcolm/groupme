@@ -1,8 +1,11 @@
 package com.alexjamesmalcolm.groupme.response;
 
+import com.alexjamesmalcolm.groupme.service.GroupMeService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.time.Instant;
@@ -14,8 +17,10 @@ import java.util.Optional;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Long.parseLong;
 
+@Component
 public class Group {
 
+    private static GroupMeService groupMe;
     private Long id;
     private Long groupId;
     private String name;
@@ -81,6 +86,11 @@ public class Group {
         this.lastMessageText = (String) preview.get("text");
         this.lastMessageSenderImageUrl = parseToUri((String) preview.get("image_url"));
         this.lastMessageAttachments = (List) preview.get("attachments");
+    }
+
+    @Autowired
+    private void setGroupMeService(GroupMeService groupMeService) {
+        Group.groupMe = groupMeService;
     }
 
     private URI parseToUri(String uri) {
@@ -178,4 +188,13 @@ public class Group {
     public List getLastMessageAttachments() {
         return lastMessageAttachments;
     }
+
+    public List<Bot> getBots(String token) {
+        return groupMe.getBots(token, groupId);
+    }
+
+    public void createBot(String token) {
+        groupMe.createBot(token, groupId);
+    }
+
 }
