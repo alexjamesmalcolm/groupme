@@ -29,63 +29,63 @@ public class GroupMeService {
         this.baseUrl = URI.create("https://api.groupme.com/v3");
     }
 
-    public Group getGroup(String accessToken, Long groupId) {
-        String path = baseUrl + "/groups/" + groupId + "?token=" + accessToken;
+    public Group getGroup(String token, Long groupId) {
+        String path = baseUrl + "/groups/" + groupId + "?token=" + token;
         Envelope envelope = makeRequest(path);
         return envelope.getResponse(Group.class);
     }
 
-    public Group getGroup(String accessToken, Message message) {
+    public Group getGroup(String token, Message message) {
         long groupId = message.getGroupId();
-        return getGroup(accessToken, groupId);
+        return getGroup(token, groupId);
     }
 
-    public List<Message> getMessages(String accessToken, Long groupId) {
-        String path = baseUrl + "/groups/" + groupId + "/messages?token=" + accessToken;
+    public List<Message> getMessages(String token, Long groupId) {
+        String path = baseUrl + "/groups/" + groupId + "/messages?token=" + token;
         Map json = restTemplate.getForObject(path, Map.class);
         Map response = (Map) json.get("response");
         Message[] messages = objectMapper.convertValue(response.get("messages"), Message[].class);
         return Arrays.asList(messages);
     }
 
-    public List<Bot> getBots(String accessToken, Long groupId) {
-        List<Bot> bots = getBots(accessToken);
+    public List<Bot> getBots(String token, Long groupId) {
+        List<Bot> bots = getBots(token);
         return bots.stream().filter(bot -> bot.getGroupId().equals(groupId)).collect(Collectors.toList());
     }
 
-    public List<Bot> getBots(String accessToken) {
-        String path = baseUrl + "/bots?token=" + accessToken;
+    public List<Bot> getBots(String token) {
+        String path = baseUrl + "/bots?token=" + token;
         Map json = restTemplate.getForObject(path, Map.class);
         Bot[] bots = objectMapper.convertValue(json.get("response"), Bot[].class);
         return Arrays.asList(bots);
     }
 
-    public List<Group> getAllGroups(String accessToken) {
-        String path = baseUrl + "/groups?token=" + accessToken;
+    public List<Group> getAllGroups(String token) {
+        String path = baseUrl + "/groups?token=" + token;
         Map json = restTemplate.getForObject(path, Map.class);
         Group[] groups = objectMapper.convertValue(json.get("response"), Group[].class);
         return Arrays.asList(groups);
     }
 
-    public List<Member> getAllMembers(String accessToken) {
-        List<Group> groups = getAllGroups(accessToken);
+    public List<Member> getAllMembers(String token) {
+        List<Group> groups = getAllGroups(token);
         return groups.stream().map(Group::getMembers).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
-    public Member getMember(String accessToken, long userId) {
-        List<Member> members = getAllMembers(accessToken);
+    public Member getMember(String token, long userId) {
+        List<Member> members = getAllMembers(token);
         return members.stream().filter(member -> member.getUserId() == userId).findFirst().get();
     }
 
-    public Member getMember(String accessToken, Message message) {
+    public Member getMember(String token, Message message) {
         long groupId = message.getGroupId();
-        Group group = getGroup(accessToken, groupId);
+        Group group = getGroup(token, groupId);
         long userId = message.getUserId();
         return group.getMembers().stream().filter(member -> member.getUserId() == userId).findFirst().get();
     }
 
-    public Me getMe(String accessToken) {
-        String path = baseUrl + "/users/me?token=" + accessToken;
+    public Me getMe(String token) {
+        String path = baseUrl + "/users/me?token=" + token;
         Envelope envelope = makeRequest(path);
         return envelope.getResponse(Me.class);
     }
@@ -105,16 +105,16 @@ public class GroupMeService {
         return restTemplate.getForObject(path, Envelope.class);
     }
 
-    public Optional<Bot> getBot(String accessToken, Long groupId, URI callback) {
-        List<Bot> bots = getBots(accessToken, groupId);
+    public Optional<Bot> getBot(String token, Long groupId, URI callback) {
+        List<Bot> bots = getBots(token, groupId);
         return bots.stream().filter(bot -> bot.getCallbackUrl().equals(callback)).findFirst();
     }
 
-    public Optional<Bot> getBot(String accessToken, Long groupId, String botId) {
-        return getBots(accessToken, groupId).stream().filter(bot -> bot.getBotId().equals(botId)).findFirst();
+    public Optional<Bot> getBot(String token, Long groupId, String botId) {
+        return getBots(token, groupId).stream().filter(bot -> bot.getBotId().equals(botId)).findFirst();
     }
 
-    public void createBot(String token, String botName, Long groupId, URI avatarUrl, URI callbackUrl, boolean dmNotification) {
+    public String createBot(String token, String botName, Long groupId, URI avatarUrl, URI callbackUrl, boolean dmNotification) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(baseUrl);
         builder.path("/bots");
         builder.queryParam("name", botName);
@@ -122,6 +122,16 @@ public class GroupMeService {
         builder.queryParam("avatar_url", avatarUrl);
         builder.queryParam("callback_url", callbackUrl);
         builder.queryParam("dm_notification", dmNotification);
+        builder.queryParam("token", token);
+        String url = builder.toUriString();
+        Map<String, Object> response = restTemplate.postForObject(url, null, Map.class);
+        return (String) response.get("bot_id");
+    }
+
+    public void deleteBot(String token, String botId) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(baseUrl);
+        builder.path("/bots/destroy");
+        builder.queryParam("bot_id", botId);
         builder.queryParam("token", token);
         String url = builder.toUriString();
         restTemplate.execute(url, HttpMethod.POST, null, null);

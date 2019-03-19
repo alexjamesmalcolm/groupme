@@ -13,8 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.*;
@@ -142,5 +144,17 @@ public class GroupMeServiceTest {
     public void shouldGetMeAsObjectBack() {
         Me me = underTest.getMe(token);
         System.out.println(me);
+    }
+
+    @Test
+    public void shouldCreateBotWithCorrectName() {
+        String botName = "Bot created from automated testing";
+        URI avatarUrl = null;
+        URI callbackUrl = null;
+        boolean dmNotification = false;
+        String botId = underTest.createBot(token, botName, groupId, avatarUrl, callbackUrl, dmNotification);
+        Bot bot = underTest.getBot(token, groupId, botId).get();
+        assertThat(bot.getName(), is(botName));
+        underTest.deleteBot(token, botId);
     }
 }

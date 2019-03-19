@@ -68,4 +68,8 @@ public class Bot {
     public Boolean getDmNotification() {
         return dmNotification;
     }
+
+    public void deleteBot(String token) {
+        // TODO give bots the ability to delete themselves
+    }
 }
