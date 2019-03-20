@@ -191,8 +191,12 @@ public class Group {
         return groupMe.getBots(token, groupId);
     }
 
-    public void createBot(String token, String name, URI avatarUrl, URI callbackUrl, boolean dmNotification) {
-        groupMe.createBot(token, name, getGroupId(), avatarUrl, callbackUrl, dmNotification);
+    public String createBot(String token, String name, URI avatarUrl, URI callbackUrl, boolean dmNotification) {
+        return groupMe.createBot(token, name, getGroupId(), avatarUrl, callbackUrl, dmNotification);
+    }
+
+    public void deleteBot(String token, String botId) {
+        groupMe.deleteBot(token, botId);
     }
 
 }
