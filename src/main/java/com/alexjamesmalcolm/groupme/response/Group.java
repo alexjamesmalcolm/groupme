@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.time.Instant;
@@ -17,7 +16,6 @@ import java.util.Optional;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Long.parseLong;
 
-@Component
 public class Group {
 
     private static GroupMeService groupMe;
