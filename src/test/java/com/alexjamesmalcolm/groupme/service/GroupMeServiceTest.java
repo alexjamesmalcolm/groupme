@@ -16,7 +16,6 @@ import javax.annotation.Resource;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.*;
