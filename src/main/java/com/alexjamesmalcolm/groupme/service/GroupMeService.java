@@ -133,7 +133,7 @@ public class GroupMeService {
         Map<String, Map> bot = new HashMap<>();
         bot.put("bot", params);
         HttpEntity<Map> request = new HttpEntity<>(bot);
-        Map<String, Object> response = restTemplate.postForObject(url, request, Map.class);
+        Map response = restTemplate.postForObject(url, request, Map.class);
         return (String) ((Map) ((Map) response.get("response")).get("bot")).get("bot_id");
     }
 
