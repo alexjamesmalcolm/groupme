@@ -115,17 +115,26 @@ public class GroupMeService {
     }
 
     public String createBot(String token, String botName, Long groupId, URI avatarUrl, URI callbackUrl, boolean dmNotification) {
+        Group group = getGroup(token, groupId);
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(baseUrl);
         builder.path("/bots");
-        builder.queryParam("name", botName);
-        builder.queryParam("group_id", groupId);
-        builder.queryParam("avatar_url", avatarUrl);
-        builder.queryParam("callback_url", callbackUrl);
-        builder.queryParam("dm_notification", dmNotification);
         builder.queryParam("token", token);
         String url = builder.toUriString();
-        Map<String, Object> response = restTemplate.postForObject(url, null, Map.class);
-        return (String) response.get("bot_id");
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", botName);
+        params.put("group_id", group.getGroupId());
+        if (avatarUrl != null) {
+            params.put("avatar_url", avatarUrl);
+        }
+        if (callbackUrl != null) {
+            params.put("callback_url", callbackUrl);
+        }
+        params.put("dm_notification", dmNotification);
+        Map<String, Map> bot = new HashMap<>();
+        bot.put("bot", params);
+        HttpEntity<Map> request = new HttpEntity<>(bot);
+        Map<String, Object> response = restTemplate.postForObject(url, request, Map.class);
+        return (String) ((Map) ((Map) response.get("response")).get("bot")).get("bot_id");
     }
 
     public void deleteBot(String token, String botId) {
