@@ -29,6 +29,7 @@ public class Me {
     private URI shareQrCodeUrl;
     private Map mfa;
     private List<String> tags;
+    private Boolean promptForSurvey;
 
     @JsonCreator
     private Me(
@@ -48,7 +49,8 @@ public class Me {
             @JsonProperty("share_url") String shareUrl,
             @JsonProperty("share_qr_code_url") String shareQrCodeUrl,
             @JsonProperty("mfa") Map mfa,
-            @JsonProperty("tags") List tags
+            @JsonProperty("tags") List tags,
+            @JsonProperty("prompt_for_survey") Boolean promptForSurvey
     ) {
         this.createdAt = Instant.ofEpochMilli(createdAt);
         this.email = email;
@@ -67,7 +69,12 @@ public class Me {
         this.shareQrCodeUrl = parseToUrl(shareQrCodeUrl);
         this.mfa = mfa;
         this.tags = tags;
+        this.promptForSurvey = promptForSurvey;
     }
+
+    public Boolean getPromptForSurvey() {
+		return promptForSurvey;
+	}
 
     private URI parseToUrl(String uri) {
         return uri != null && !uri.isEmpty() ? URI.create(uri) : null;
