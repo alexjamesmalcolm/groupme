@@ -1,18 +1,32 @@
 package com.alexjamesmalcolm.groupme.service;
 
+import java.net.URI;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
+
 import com.alexjamesmalcolm.groupme.request.BotMessage;
-import com.alexjamesmalcolm.groupme.response.*;
+import com.alexjamesmalcolm.groupme.response.Bot;
+import com.alexjamesmalcolm.groupme.response.Envelope;
+import com.alexjamesmalcolm.groupme.response.Group;
+import com.alexjamesmalcolm.groupme.response.Me;
+import com.alexjamesmalcolm.groupme.response.Member;
+import com.alexjamesmalcolm.groupme.response.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.annotation.Resource;
-import java.net.URI;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class GroupMeService {
@@ -67,6 +81,14 @@ public class GroupMeService {
         return Arrays.asList(groups);
     }
 
+    public List<Group> getAllGroups(String token, Duration range) {
+        List<Group> groups = getAllGroups(token);
+        return groups.stream().filter(group -> {
+            Instant timeOfLastMessage = group.getLastMessageCreatedAt();
+            return timeOfLastMessage.isBefore(Instant.now().plus(range));
+        }).collect(Collectors.toList());
+    }
+
     public List<Member> getAllMembers(String token) {
         List<Group> groups = getAllGroups(token);
         return groups.stream().map(Group::getMembers).flatMap(Collection::stream).collect(Collectors.toList());
@@ -114,7 +136,8 @@ public class GroupMeService {
         return getBots(token, groupId).stream().filter(bot -> bot.getBotId().equals(botId)).findFirst();
     }
 
-    public String createBot(String token, String botName, Long groupId, URI avatarUrl, URI callbackUrl, boolean dmNotification) {
+    public String createBot(String token, String botName, Long groupId, URI avatarUrl, URI callbackUrl,
+            boolean dmNotification) {
         Group group = getGroup(token, groupId);
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(baseUrl);
         builder.path("/bots");
